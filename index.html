@@ -1,41 +1,54 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Exam Physiology Trends</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>Student Exam Performance Analysis</h1>
-    <div id="controls">
-      <label>
-        Exam:
-        <select id="exam-select">
-            <option value="all">All Exams</option>
-            <option value="midterm 1">Midterm 1</option>
-            <option value="midterm 2">Midterm 2</option>
-          <option value="final">Final</option>
-        </select>
-      </label>
-      <label>
-        Performance:
-        <select id="performance-select">
-          <option value="all">All Students</option>
-          <option value="good">Good (≥85%)</option>
-          <option value="average">Average (70–84%)</option>
-          <option value="bad">Bad (&lt;70%)</option>
-        </select>
-      </label>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Exam Physiology Trends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <h1>Student Exam Performance Analysis</h1>
+
+  <div id="controls">
+    <div class="control-card">
+
+      <div class="button-group">
+        <span class="group-label">Exams:</span>
+        <div class="button-row">
+          <button data-value="all" class="exam-btn selected">All</button>
+          <button data-value="midterm 1" class="exam-btn">Midterm 1</button>
+          <button data-value="midterm 2" class="exam-btn">Midterm 2</button>
+          <button data-value="final" class="exam-btn">Final</button>
+
+        </div>
+      </div>
     </div>
 
-    <div id="charts">
-      <div id="chart-temp" class="chart"></div>
-      <div id="chart-eda" class="chart"></div>
-      <div id="chart-hr"  class="chart"></div>
-    </div>
+    <div class="control-card">
 
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="main.js"></script>
-  </body>
+      <div class="button-group">
+        <span class="group-label">Performance:</span>
+        <div class="button-row">
+          <button data-value="all" class="performance-btn selected">All</button>
+          <button data-value="good" class="performance-btn">Good</button>
+          <button data-value="average" class="performance-btn">Average</button>
+          <button data-value="bad" class="performance-btn">Bad</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="charts">
+    <div id="chart-temp" class="chart"></div>
+    <div id="chart-eda" class="chart"></div>
+    <div id="chart-hr" class="chart"></div>
+  </div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="main.js"></script>
+</body>
+
 </html>

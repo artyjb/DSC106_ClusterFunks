@@ -1,44 +1,118 @@
 body {
-    font-family: sans-serif;
-    background: #fafafa;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  h1 {
-    margin-bottom: 10px;
-  }
-  
-  #controls {
-    margin-bottom: 20px;
-  }
-  
-  #controls label {
-    margin: 0 10px;
-    font-weight: bold;
-  }
-  
-  #charts {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
-  }
-  
-  .chart {
-    width: 800px;
-  }
-  
-  .tooltip {
-    position: absolute;
-    background: rgba(255,255,255,0.9);
-    border: 1px solid #666;
-    padding: 6px 8px;
-    border-radius: 4px;
-    pointer-events: none;
-    font-size: 12px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
-  
+  font-family: sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 40px 20px;
+  /* Combined here */
+  text-align: center;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 60px;
+  /* increase size */
+  font-weight: 0;
+  margin-bottom: 50px;
+  /* add more spacing below */
+
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 200px;
+  /* adjust width as needed */
+  height: 4px;
+  background-color: #109d35;
+  /* light grey line */
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 90%;
+}
+
+
+
+#controls {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 30px auto;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Exam & Performance Groups */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Section Labels ("Exams", "Performance") */
+.group-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Horizontal Button Layout */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Button Styling */
+.button-row button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Selected Button Styling */
+.button-row button.selected {
+  background-color: #109d35;
+  color: white;
+  border-color: #109d35;
+}
+
+/* Charts Layout */
+#charts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+}
+
+.chart {
+  width: 800px;
+}
+
+/* Tooltip Styling */
+.tooltip {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #666;
+  padding: 6px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 12px;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Control Boarder */
+.control-card {
+  background-color: #e5e4e4;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  min-width: 300px;
+}

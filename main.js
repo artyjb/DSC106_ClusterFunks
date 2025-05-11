@@ -8,11 +8,10 @@ d3.csv("data/exam_data.csv", d => ({
   exam: d.exam.toLowerCase(),
   score: +d.score
 })).then(data => {
-  // assign performance groups
   data.forEach(d => {
-    if (d.score >= 85)         d.group = "good";
-    else if (d.score >= 70)    d.group = "average";
-    else                        d.group = "bad";
+    if (d.score >= 85) d.group = "good";
+    else if (d.score >= 70) d.group = "average";
+    else d.group = "bad";
   });
 
   fullData = data;
@@ -21,28 +20,34 @@ d3.csv("data/exam_data.csv", d => ({
 });
 
 function initControls() {
-  d3.select("#exam-select").on("change", updateAllCharts);
-  d3.select("#performance-select").on("change", updateAllCharts);
+  d3.selectAll(".exam-btn").on("click", function () {
+    d3.selectAll(".exam-btn").classed("selected", false);
+    d3.select(this).classed("selected", true);
+    updateAllCharts();
+  });
+
+  d3.selectAll(".performance-btn").on("click", function () {
+    d3.selectAll(".performance-btn").classed("selected", false);
+    d3.select(this).classed("selected", true);
+    updateAllCharts();
+  });
 }
 
 function updateAllCharts() {
-  const examVal  = d3.select("#exam-select").property("value");
-  const perfVal  = d3.select("#performance-select").property("value");
-  
-  // filter data once
-  const filtered = fullData.filter(d => 
+  const examVal = d3.select(".exam-btn.selected").attr("data-value");
+  const perfVal = d3.select(".performance-btn.selected").attr("data-value");
+
+  const filtered = fullData.filter(d =>
     (examVal === "all" || d.exam === examVal) &&
     (perfVal === "all" || d.group === perfVal)
   );
 
-  // draw each chart
   drawLineChart("#chart-temp", filtered, d => d.temperature, "Skin Temp (°C)");
-  drawLineChart("#chart-eda",  filtered, d => d.eda,         "Skin Conductance (EDA)");
-  drawLineChart("#chart-hr",   filtered, d => d.heart_rate,  "Heart Rate (BPM)");
+  drawLineChart("#chart-eda", filtered, d => d.eda, "Skin Conductance (EDA)");
+  drawLineChart("#chart-hr", filtered, d => d.heart_rate, "Heart Rate (BPM)");
 }
 
 function drawLineChart(container, data, valueFn, yLabel) {
-  // clear
   d3.select(container).html("");
 
   if (!data.length) {
@@ -54,18 +59,17 @@ function drawLineChart(container, data, valueFn, yLabel) {
     return;
   }
 
-  const margin = {top: 40, right: 80, bottom: 50, left: 60};
-  const width  = 800 - margin.left - margin.right;
+  const margin = { top: 40, right: 80, bottom: 50, left: 60 };
+  const width = 800 - margin.left - margin.right;
   const height = 300 - margin.top - margin.bottom;
 
   const svg = d3.select(container)
     .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
     .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // nest by exam
   const series = d3.rollups(
     data,
     v => d3.mean(v, valueFn),
@@ -74,61 +78,46 @@ function drawLineChart(container, data, valueFn, yLabel) {
   ).map(([exam, timeMap]) => ({
     exam,
     values: Array.from(timeMap, ([t, v]) => ({ timestamp: t, value: v }))
-      .sort((a,b) => a.timestamp - b.timestamp)
+      .sort((a, b) => a.timestamp - b.timestamp)
   }));
 
-  // x & y scales
-  const allTimes  = series.flatMap(s => s.values.map(d => d.timestamp));
+  const allTimes = series.flatMap(s => s.values.map(d => d.timestamp));
   const allValues = series.flatMap(s => s.values.map(d => d.value));
-  const x = d3.scaleLinear()
-    .domain(d3.extent(allTimes)).nice()
-    .range([0, width]);
-  const y = d3.scaleLinear()
-    .domain(d3.extent(allValues)).nice()
-    .range([height, 0]);
+  const x = d3.scaleLinear().domain(d3.extent(allTimes)).nice().range([0, width]);
+  const y = d3.scaleLinear().domain(d3.extent(allValues)).nice().range([height, 0]);
 
-  // axes
   svg.append("g")
-     .attr("transform", `translate(0,${height})`)
-     .call(d3.axisBottom(x));
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x));
   svg.append("g")
-     .call(d3.axisLeft(y));
+    .call(d3.axisLeft(y));
 
-  // axis labels
   svg.append("text")
-     .attr("x", width/2).attr("y", height + 40)
-     .attr("text-anchor", "middle")
-     .text("Minutes from Start");
+    .attr("x", width / 2).attr("y", height + 40)
+    .attr("text-anchor", "middle")
+    .text("Minutes from Start");
   svg.append("text")
-     .attr("transform", "rotate(-90)")
-     .attr("x", -height/2).attr("y", -45)
-     .attr("text-anchor", "middle")
-     .text(yLabel);
-
-  // chart title
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2).attr("y", -45)
+    .attr("text-anchor", "middle")
+    .text(yLabel);
   svg.append("text")
-     .attr("x", width/2).attr("y", -15)
-     .attr("text-anchor", "middle")
-     .style("font-size", "16px")
-     .style("font-weight", "bold")
-     .text(yLabel + " Over Time by Exam");
+    .attr("x", width / 2).attr("y", -15)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("font-weight", "bold")
+    .text(yLabel + " Over Time by Exam");
 
-  // color scale
-  const color = d3.scaleOrdinal(d3.schemeTableau10)
-    .domain(series.map(s => s.exam));
-
-  // line generator
+  const color = d3.scaleOrdinal(d3.schemeTableau10).domain(series.map(s => s.exam));
   const line = d3.line()
     .x(d => x(d.timestamp))
     .y(d => y(d.value));
 
-  // tooltip
   const tooltip = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
-  // draw lines & dots
   series.forEach(s => {
     const path = svg.append("path")
       .datum(s.values)
@@ -142,30 +131,29 @@ function drawLineChart(container, data, valueFn, yLabel) {
       .data(s.values)
       .enter()
       .append("circle")
-        .attr("class", `dot-${s.exam}`)
-        .attr("cx", d => x(d.timestamp))
-        .attr("cy", d => y(d.value))
-        .attr("r", 3)
-        .attr("fill", color(s.exam))
-        .on("mouseover", (e,d) => {
-          tooltip.transition().duration(100).style("opacity", .9);
-          tooltip.html(`
+      .attr("class", `dot-${s.exam}`)
+      .attr("cx", d => x(d.timestamp))
+      .attr("cy", d => y(d.value))
+      .attr("r", 3)
+      .attr("fill", color(s.exam))
+      .on("mouseover", (e, d) => {
+        tooltip.transition().duration(100).style("opacity", .9);
+        tooltip.html(`
             <strong>Exam:</strong> ${s.exam}<br/>
             <strong>Min:</strong> ${d.timestamp}&#39;<br/>
             <strong>Val:</strong> ${d.value.toFixed(2)}
           `)
           .style("left", (e.pageX + 10) + "px")
-          .style("top",  (e.pageY - 30) + "px");
-        })
-        .on("mouseout", () => tooltip.transition().duration(200).style("opacity", 0));
+          .style("top", (e.pageY - 30) + "px");
+      })
+      .on("mouseout", () => tooltip.transition().duration(200).style("opacity", 0));
   });
 
-  // legend with click‐to‐toggle
   const legend = svg.append("g")
     .attr("transform", `translate(${width + 10},0)`);
-  series.forEach((s,i) => {
+  series.forEach((s, i) => {
     const g = legend.append("g")
-      .attr("transform", `translate(0,${i*25})`)
+      .attr("transform", `translate(0,${i * 25})`)
       .style("cursor", "pointer")
       .on("click", () => toggleSeries(s.exam));
 
@@ -180,8 +168,8 @@ function drawLineChart(container, data, valueFn, yLabel) {
   });
 
   function toggleSeries(ex) {
-    const line   = svg.select(`#line-${ex}`);
-    const dots   = svg.selectAll(`.dot-${ex}`);
+    const line = svg.select(`#line-${ex}`);
+    const dots = svg.selectAll(`.dot-${ex}`);
     const visible = line.style("display") !== "none";
     line.style("display", visible ? "none" : null);
     dots.style("display", visible ? "none" : null);
