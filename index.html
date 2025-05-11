@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Exam Physiology Trends</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Student Exam Performance Analysis</h1>
+    <div id="controls">
+      <label>
+        Exam:
+        <select id="exam-select">
+            <option value="all">All Exams</option>
+            <option value="midterm 1">Midterm 1</option>
+            <option value="midterm 2">Midterm 2</option>
+          <option value="final">Final</option>
+        </select>
+      </label>
+      <label>
+        Performance:
+        <select id="performance-select">
+          <option value="all">All Students</option>
+          <option value="good">Good (≥85%)</option>
+          <option value="average">Average (70–84%)</option>
+          <option value="bad">Bad (&lt;70%)</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="charts">
+      <div id="chart-temp" class="chart"></div>
+      <div id="chart-eda" class="chart"></div>
+      <div id="chart-hr"  class="chart"></div>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

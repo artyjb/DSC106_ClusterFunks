@@ -1,0 +1,44 @@
+body {
+    font-family: sans-serif;
+    background: #fafafa;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 10px;
+  }
+  
+  #controls {
+    margin-bottom: 20px;
+  }
+  
+  #controls label {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+  
+  #charts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+  
+  .chart {
+    width: 800px;
+  }
+  
+  .tooltip {
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #666;
+    padding: 6px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
